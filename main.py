@@ -15,7 +15,7 @@ app = FastAPI()
 
 @app.get("/ping/{name}")
 async def helloBuddy(name):
-	return f"Hello {name}, How are you?"
+	return f"Hello {name}, How are you?!"
 
 @app.get("/hello/")
 async def pinging(count: int = 0):
