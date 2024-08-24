@@ -8,8 +8,8 @@ from PIL import Image
 import tensorflow as tf 
 import sys, os
 import pickle
-import sklearn
-from sklearn.ensemble import RandomForestClassifier 
+#import sklearn
+#from sklearn.ensemble import RandomForestClassifier 
 
 app = FastAPI()
 
@@ -123,23 +123,23 @@ def read_file_as_image(data) -> np.ndarray:
 	image = np.array(Image.open(BytesIO(data)))
 	return image
 
-@app.post("/predictCropReco")
-async def predictCropReco(input_data: InputData):
-	try:
-		with open('models/simplecropreco_2.pkl', 'rb') as f:
-			MODEL = pickle.load(f)
-
-		# MODEL = tf.keras.models.load_model("models/classifier.pkl")
-		CLASS_NAMES = ['apple', 'banana','blackgram','chickpea','coconut','coffee','cotton', 'grapes','jute', 'kidneybeans', 'lentil', 'maize','mango','mothbeans','mungbean','muskmelon','orange','papaya','pigeonpeas', 'pomegranate', 'rice', 'watermelon']
-		features = np.array([[input_data.N, input_data.P, input_data.K, input_data.temperature, input_data.humidity, input_data.ph, input_data.rainfall]])
-		predictions = MODEL.predict(features)
-		ronum = predictions[0]
-		predicted_class = CLASS_NAMES[ronum]
-		# confidence = np.max(predictions[0])
-		return f'<br/>&nbsp;- Recommended Crop: {predicted_class}' #<br/>&nbsp;- Confidence: {float(confidence)*100}%'  #{float(confidence)}'
-	except Exception as error:
-		exc_type, exc_obj, exc_tb = sys.exc_info()
-		return f"Error: {str(error)}, Line#: {exc_tb.tb_lineno} and N:{input_data.N}"
+#@app.post("/predictCropReco")
+#async def predictCropReco(input_data: InputData):#
+#	try:
+#		with open('models/simplecropreco_2.pkl', 'rb') as f:
+#			MODEL = pickle.load(f)
+#
+#		# MODEL = tf.keras.models.load_model("models/classifier.pkl")
+#		CLASS_NAMES = ['apple', 'banana','blackgram','chickpea','coconut','coffee','cotton', 'grapes','jute', 'kidneybeans', 'lentil', 'maize','mango','mothbeans','mungbean','muskmelon','orange','papaya','pigeonpeas', 'pomegranate', 'rice', 'watermelon']
+#		features = np.array([[input_data.N, input_data.P, input_data.K, input_data.temperature, input_data.humidity, input_data.ph, input_data.rainfall]])
+#		predictions = MODEL.predict(features)
+#		ronum = predictions[0]
+#		predicted_class = CLASS_NAMES[ronum]
+#		# confidence = np.max(predictions[0])
+#		return f'<br/>&nbsp;- Recommended Crop: {predicted_class}' #<br/>&nbsp;- Confidence: {float(confidence)*100}%'  #{float(confidence)}'
+#	except Exception as error:
+#		exc_type, exc_obj, exc_tb = sys.exc_info()
+#		return f"Error: {str(error)}, Line#: {exc_tb.tb_lineno} and N:{input_data.N}"
 
 if __name__ == "__main__":
 	uvicorn.run(app, host='localhost', port=8000)
